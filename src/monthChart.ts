@@ -14,25 +14,24 @@ import {
 import { HeatmapChart, HeatmapSeriesOption } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 
-
-  const months = [1,2,3,4,5,6,7,8,9,10,11,12];
+const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 function getMonthData(dates: Date[]): [number, number] {
-
   return months.map((month) => {
-  const relevantDates = dates.filter((date)=> date.getMonth() === month-1);
-    return [month-1,1, relevantDates.length]
+    const relevantDates = dates.filter((date) => date.getMonth() === month - 1);
+    return [month - 1, 1, relevantDates.length];
   });
 }
 
 function getMonthLabels(year: number, months: number[]): Date[] {
   return months
-  .map((item:number) => `${item}`.padStart(2,'0'))
-  .map(monthDateString => `${year}-${monthDateString}-01T00:00:00.000Z`)
-  .map(isoDateString => new Date(isoDateString))
-  .map((date: Date) => date.toLocaleString("default", {
-            month: "short",
-          })
-      )
+    .map((item: number) => `${item}`.padStart(2, "0"))
+    .map((monthDateString) => `${year}-${monthDateString}-01T00:00:00.000Z`)
+    .map((isoDateString) => new Date(isoDateString))
+    .map((date: Date) =>
+      date.toLocaleString("default", {
+        month: "short"
+      })
+    );
 }
 
 function getPiesLabel(number: number) {
@@ -40,10 +39,9 @@ function getPiesLabel(number: number) {
 }
 
 export function makeMonthChart(dateStrings: string[]) {
-
-const dates = dateStrings.map(item=>new Date(item));
-const year = dates[0].getFullYear();
-const monthAxisLabels = getMonthLabels(year, months);
+  const dates = dateStrings.map((item) => new Date(item));
+  const year = dates[0].getFullYear();
+  const monthAxisLabels = getMonthLabels(year, months);
 
   echarts.use([
     TitleComponent,
@@ -68,9 +66,7 @@ const monthAxisLabels = getMonthLabels(year, months);
   var myChart = echarts.init(chartDom);
   var option: EChartsOption;
 
-
   function getVirtualData() {
-    
     const piesPerMonth = getMonthData(dates);
     return piesPerMonth.map((item) => {
       return {
@@ -80,7 +76,7 @@ const monthAxisLabels = getMonthLabels(year, months);
           lineHeight: 16,
           show: true
         }
-        }
+      };
     });
   }
 
@@ -92,14 +88,13 @@ const monthAxisLabels = getMonthLabels(year, months);
     },
     xAxis: {
       type: "category",
-      data: monthAxisLabels,
+      data: monthAxisLabels
     },
     yAxis: {
       type: "category",
       axisLabel: {
         show: false
-      },
-      
+      }
     },
     tooltip: {
       show: true,
@@ -107,7 +102,7 @@ const monthAxisLabels = getMonthLabels(year, months);
     },
     visualMap: {
       min: 0,
-      max: 8,
+      max: 15,
       type: "continuous",
       orient: "horizontal",
       left: "center",
@@ -115,7 +110,7 @@ const monthAxisLabels = getMonthLabels(year, months);
       show: false,
       color: ["#0a9e40", "#fff"]
     },
-  
+
     series: {
       type: "heatmap",
       itemStyle: {

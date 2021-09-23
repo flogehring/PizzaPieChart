@@ -103,7 +103,7 @@ export function makeWeekdayChart(dateStrings: string[]) {
     },
     visualMap: {
       min: 0,
-      max: 8,
+      max: 20,
       type: "continuous",
       orient: "horizontal",
       left: "center",

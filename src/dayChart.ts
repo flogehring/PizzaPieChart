@@ -13,7 +13,11 @@ import {
 import { HeatmapChart, HeatmapSeriesOption } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 
-export function makeDayChart(dates: string[]) {
+export function makeDayChart(
+  dates: string[],
+  year: number,
+  mountEl: HTMLDivElement
+) {
   echarts.use([
     TitleComponent,
     CalendarComponent,
@@ -32,7 +36,7 @@ export function makeDayChart(dates: string[]) {
     | HeatmapSeriesOption
   >;
 
-  var chartDom = document.getElementById("dayChart")!;
+  var chartDom = mountEl;
   var myChart = echarts.init(chartDom);
   var option: EChartsOption;
 
@@ -56,11 +60,21 @@ export function makeDayChart(dates: string[]) {
     });
   }
 
+  const series: HeatmapSeriesOption = {
+    type: "heatmap",
+    coordinateSystem: "calendar",
+    itemStyle: {
+      color: "transparent"
+    },
+
+    data: getVirtualData()
+  };
+
   option = {
     title: {
       top: 30,
       left: "center",
-      text: "🍕 PunchCard"
+      text: "🍕 " + year
     },
 
     tooltip: {
@@ -80,27 +94,42 @@ export function makeDayChart(dates: string[]) {
         color: "transparent"
       }
     },
-    calendar: {
-      top: 120,
-      left: 30,
-      right: 30,
-      cellSize: ["auto", 13],
-      range: "2021",
-      itemStyle: {
-        borderWidth: 0.5
+    calendar: [
+      {
+        top: 80,
+        left: 20,
+        right: 20,
+        cellSize: ["auto", 15],
+        range: [`${year}-01-01`, `${year}-06-30`],
+        itemStyle: {
+          borderWidth: 0.5
+        },
+        yearLabel: { show: true },
+        dayLabel: { firstDay: 1 }
       },
-      yearLabel: { show: false },
-      dayLabel: { firstDay: 1 }
-    },
-    series: {
-      type: "heatmap",
-      coordinateSystem: "calendar",
-      itemStyle: {
-        color: "transparent"
+      {
+        top: 240,
+        left: 20,
+        right: 20,
+        cellSize: ["auto", 15],
+        range: [`${year}-07-01`, `${year}-12-31`],
+        itemStyle: {
+          borderWidth: 0.5
+        },
+        yearLabel: { show: true },
+        dayLabel: { firstDay: 1 }
+      }
+    ],
+    series: [
+      {
+        ...series,
+        calendarIndex: 0
       },
-
-      data: getVirtualData()
-    }
+      {
+        ...series,
+        calendarIndex: 1
+      }
+    ]
   };
 
   myChart.setOption(option);
