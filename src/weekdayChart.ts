@@ -9,9 +9,15 @@ import {
   VisualMapComponent,
   VisualMapComponentOption,
   LegendComponent,
-  GridComponent
+  GridComponent,
+  GridComponentOption
 } from "echarts/components";
-import { HeatmapChart, HeatmapSeriesOption } from "echarts/charts";
+import {
+  HeatmapChart,
+  HeatmapSeriesOption,
+  PieChart,
+  PieSeriesOption
+} from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 
 const days = [1, 2, 3, 4, 5, 6, 0];
@@ -24,7 +30,7 @@ function getWeekdayData(dates: Date[]): [number, number, number][] {
   });
 }
 
-function getxAxisLabels(): string[] {
+function getDayLabels(): string[] {
   return [
     "Monday",
     "Tuesday",
@@ -36,44 +42,39 @@ function getxAxisLabels(): string[] {
   ];
 }
 
-function getPiesLabel(number: number) {
-  return "🍕\n".repeat(number);
+function getPiesLabel(dayNumber: number, count: number) {
+  return `${getDayLabels()[dayNumber]}: ${count} 🍕`;
 }
 
-export function makeWeekdayChart(dateStrings: string[]) {
-  const dates = dateStrings.map((item) => new Date(item));
-  const xAxisLabels = getxAxisLabels();
+export function makeWeekdayChart(dates: Date[]) {
   const piesPerWeekday = getWeekdayData(dates);
 
   echarts.use([
     TitleComponent,
-    CalendarComponent,
     TooltipComponent,
-    VisualMapComponent,
-    HeatmapChart,
-    GridComponent,
     CanvasRenderer,
-    LegendComponent
+    LegendComponent,
+    PieChart,
+    GridComponent
   ]);
 
   type EChartsOption = echarts.ComposeOption<
     | TitleComponentOption
-    | CalendarComponentOption
     | TooltipComponentOption
-    | VisualMapComponentOption
-    | HeatmapSeriesOption
+    | PieSeriesOption
+    | GridComponentOption
   >;
 
   var chartDom = document.getElementById("weekdayChart")!;
   var myChart = echarts.init(chartDom);
   var option: EChartsOption;
 
-  function getVirtualData() {
+  function getWeekdayDataItems() {
     return piesPerWeekday.map((item) => {
       return {
         value: item,
         label: {
-          formatter: () => getPiesLabel(item[2]),
+          formatter: () => getPiesLabel(item[0], item[2]),
           lineHeight: 16,
           show: true
         }
@@ -83,37 +84,17 @@ export function makeWeekdayChart(dateStrings: string[]) {
 
   option = {
     title: {
-      top: 30,
+      top: 0,
       left: "center",
-      text: "🍕 per weekday"
-    },
-    xAxis: {
-      type: "category",
-      data: xAxisLabels
-    },
-    yAxis: {
-      type: "category",
-      axisLabel: {
-        show: false
-      }
+      text: `🍕 per weekday (${dates[0].getFullYear()})`
     },
     tooltip: {
       show: true,
       trigger: "item"
     },
-    visualMap: {
-      min: 0,
-      max: 20,
-      type: "continuous",
-      orient: "horizontal",
-      left: "center",
-      top: 65,
-      show: false,
-      color: ["#0a9e40", "#fff"]
-    },
     series: {
-      type: "heatmap",
-      data: getVirtualData()
+      type: "pie",
+      data: getWeekdayDataItems()
     }
   };
 

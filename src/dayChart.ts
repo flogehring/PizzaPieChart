@@ -13,7 +13,7 @@ import {
 import { HeatmapChart, HeatmapSeriesOption } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 
-export function makeDayChart(
+export function makeCalendarChart(
   dates: string[],
   year: number,
   mountEl: HTMLDivElement
@@ -40,7 +40,7 @@ export function makeDayChart(
   var myChart = echarts.init(chartDom);
   var option: EChartsOption;
 
-  function getVirtualData() {
+  function getSeriesDataItems() {
     return dates.map((item: string) => {
       const date = new Date(item);
       return {
@@ -67,7 +67,7 @@ export function makeDayChart(
       color: "transparent"
     },
 
-    data: getVirtualData()
+    data: getSeriesDataItems()
   };
 
   option = {

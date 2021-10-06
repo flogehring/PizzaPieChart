@@ -15,14 +15,15 @@ import { HeatmapChart, HeatmapSeriesOption } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-function getMonthData(dates: Date[]): [number, number] {
+
+function getMonthData(dates: Date[]): [number, number, number][] {
   return months.map((month) => {
     const relevantDates = dates.filter((date) => date.getMonth() === month - 1);
     return [month - 1, 1, relevantDates.length];
   });
 }
 
-function getMonthLabels(year: number, months: number[]): Date[] {
+function getMonthLabels(year: number, months: number[]): string[] {
   return months
     .map((item: number) => `${item}`.padStart(2, "0"))
     .map((monthDateString) => `${year}-${monthDateString}-01T00:00:00.000Z`)
@@ -38,8 +39,7 @@ function getPiesLabel(number: number) {
   return "🍕\n".repeat(number);
 }
 
-export function makeMonthChart(dateStrings: string[]) {
-  const dates = dateStrings.map((item) => new Date(item));
+export function makeMonthChart(dates: Date[]) {
   const year = dates[0].getFullYear();
   const monthAxisLabels = getMonthLabels(year, months);
 
@@ -84,7 +84,7 @@ export function makeMonthChart(dateStrings: string[]) {
     title: {
       top: 30,
       left: "center",
-      text: "🍕 per month"
+      text: `🍕 per month (${dates[0].getFullYear()})`
     },
     xAxis: {
       type: "category",
