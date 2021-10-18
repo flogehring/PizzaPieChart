@@ -60,6 +60,11 @@ export function makeCalendarChart(
     });
   }
 
+  function getNumberOfEntries(dateStrings: string[], year: number) {
+    return dateStrings.filter((item) => new Date(item).getFullYear() === year)
+      .length;
+  }
+
   const series: HeatmapSeriesOption = {
     type: "heatmap",
     coordinateSystem: "calendar",
@@ -74,7 +79,7 @@ export function makeCalendarChart(
     title: {
       top: 30,
       left: "center",
-      text: "🍕 " + year
+      text: `🍕  ${year} (${getNumberOfEntries(dates, year)})`
     },
 
     tooltip: {
