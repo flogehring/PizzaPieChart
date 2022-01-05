@@ -4,7 +4,7 @@ import { makeWeekdayChart } from "./weekdayChart";
 import { dates } from "./pieDays";
 import * as echarts from "echarts/core";
 
-const years = [2021, 2020];
+const years = [2022, 2021, 2020];
 const dates2021 = dates
   .map((dateString: string) => new Date(dateString))
   .filter((date) => date.getFullYear() === 2021);
