@@ -20,17 +20,31 @@ function makeDayCharts() {
   });
 }
 
+function makeMonthCharts() {
+  years.forEach((year) => {
+    const el = document.getElementById("monthCharts");
+    const mountEl = document.createElement("div");
+    mountEl.classList.add("chart");
+    mountEl.classList.add("monthChart");
+    el?.appendChild(mountEl);
+    makeMonthChart(mountEl,
+      dates
+        .map((s) => new Date(s))
+        .filter((d: Date) => d.getFullYear() === year));
+  });
+}
+
 function resizeCharts() {
   const wrappers = document.querySelectorAll(".chart");
   wrappers.forEach((wrapper) => {
     const instance = echarts.getInstanceByDom(wrapper as HTMLElement);
-    instance.resize();
+    instance?.resize();
   });
 }
 
 makeDayCharts();
 
-makeMonthChart(dates2021);
+makeMonthCharts();
 
 makeWeekdayChart(dates2021);
 

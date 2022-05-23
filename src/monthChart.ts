@@ -39,7 +39,7 @@ function getPiesLabel(number: number) {
   return "🍕\n".repeat(number);
 }
 
-export function makeMonthChart(dates: Date[]) {
+export function makeMonthChart(el: HTMLElement, dates: Date[]) {
   const year = dates[0].getFullYear();
   const monthAxisLabels = getMonthLabels(year, months);
 
@@ -62,8 +62,7 @@ export function makeMonthChart(dates: Date[]) {
     | HeatmapSeriesOption
   >;
 
-  var chartDom = document.getElementById("monthChart")!;
-  var myChart = echarts.init(chartDom);
+  var myChart = echarts.init(el);
   var option: EChartsOption;
 
   function getVirtualData() {
