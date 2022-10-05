@@ -40,6 +40,7 @@ function getPiesLabel(number: number) {
 }
 
 export function makeMonthChart(el: HTMLElement, dates: Date[]) {
+  // debugger
   const year = dates[0].getFullYear();
   const monthAxisLabels = getMonthLabels(year, months);
 

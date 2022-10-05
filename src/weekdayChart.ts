@@ -86,11 +86,10 @@ export function makeWeekdayChart(dates: Date[]) {
     title: {
       top: 0,
       left: "center",
-      text: `🍕 per weekday (${dates[0].getFullYear()})`
+      text: `🍕 per weekday`
     },
     tooltip: {
-      show: true,
-      trigger: "item"
+      show: false
     },
     series: {
       type: "pie",

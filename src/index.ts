@@ -46,7 +46,7 @@ makeDayCharts();
 
 makeMonthCharts();
 
-makeWeekdayChart(dates2021);
+makeWeekdayChart(dates.map((d) => (new Date(d))));
 
 window.addEventListener("resize", () => {
   resizeCharts();
