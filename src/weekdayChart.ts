@@ -20,30 +20,26 @@ import {
 } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 
-const days = [1, 2, 3, 4, 5, 6, 0];
+const dayLabels = getWeekDays(navigator.language);
+const daysOfTheWeek = [0, 1, 2, 3, 4, 5, 6];
 
-function getWeekdayData(dates: Date[]): [number, number, number][] {
-  let i = 0;
-  return days.map((day: number) => {
-    const relevantDates = dates.filter((date) => date.getDay() === day);
-    return [i++, 1, relevantDates.length];
+
+function getWeekDays(locale: string) {
+  const baseDate = new Date(2022, 8, 25); // just a Sunday
+  const weekDays = [];
+  for (let i = 0; i < 7; i++) {
+    weekDays.push(baseDate.toLocaleDateString(locale, { weekday: 'long' }));
+    baseDate.setDate(baseDate.getDate() + 1);
+  }
+  return weekDays;
+}
+
+function getWeekdayData(dates: Date[]): { value: number, name: string }[] {
+  return daysOfTheWeek.map(weekday => {
+    console.log(weekday);
+    const sumOfHits = dates.filter(date => date.getDay() === weekday).length;
+    return { value: sumOfHits, name: dayLabels[weekday] };
   });
-}
-
-function getDayLabels(): string[] {
-  return [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-}
-
-function getPiesLabel(dayNumber: number, count: number) {
-  return `${getDayLabels()[dayNumber]}: ${count} 🍕`;
 }
 
 export function makeWeekdayChart(dates: Date[]) {
@@ -72,9 +68,10 @@ export function makeWeekdayChart(dates: Date[]) {
   function getWeekdayDataItems() {
     return piesPerWeekday.map((item) => {
       return {
-        value: item,
+        value: item.value,
+        name: item.name,
         label: {
-          formatter: () => getPiesLabel(item[0], item[2]),
+          formatter: () => `${item.name}: ${item.value} 🍕`,
           lineHeight: 16,
           show: true
         }
