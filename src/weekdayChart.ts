@@ -36,7 +36,6 @@ function getWeekDays(locale: string) {
 
 function getWeekdayData(dates: Date[]): { value: number, name: string }[] {
   return daysOfTheWeek.map(weekday => {
-    console.log(weekday);
     const sumOfHits = dates.filter(date => date.getDay() === weekday).length;
     return { value: sumOfHits, name: dayLabels[weekday] };
   });
